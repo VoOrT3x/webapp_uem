@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Flask App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style1.css') }}">
+    <style>
+        .title-3d {
+            text-shadow: 2px 2px 4px #555;
+            color: #000;
+        }
+
+        .highlight-button {
+            background-color: #008000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+        }
+
+        .highlight-button:hover {
+            background-color: #006400;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title-3d">Optimizador Moçambicano de Sistemas Híbridos para Geração de Energia</h1>
+
+        <a href="/map">
+            <button class="highlight-button">Abrir o Mapa</button>
+        </a>
+    </div>
+</body>
+</html>

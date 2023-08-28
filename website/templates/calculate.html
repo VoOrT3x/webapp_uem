@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculate Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}">
+</head>
+<body>
+    <h1>{{ district_name }}</h1>
+  
+    <div class="overlay">
+        <div class="result-overlay">
+            <button class="close-button" title="Close">&times;</button>
+            <h2>Result</h2>
+            <p>x_1: {{ results.x_1 }}</p>
+            <p>x_2: {{ results.x_2 }}</p>
+            <p>x_3: {{ results.x_3 }}</p>
+        </div>
+    </div>
+
+</body>
+</html>

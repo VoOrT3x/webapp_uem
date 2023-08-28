@@ -1,0 +1,79 @@
+body {
+    background-image: url("2.jpg");
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.body2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    float: right;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    width:15%;
+    margin-left:20px;
+    margin-right: 20px;
+    height: 35%;
+}
+
+input[type="number"] {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.container2 {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    width:10%;
+    height: 35%;
+    position: relative;
+    color: green;
+}
+
+.container3 {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    width:10%;
+    height: 35%;
+    color: green;
+}
+#copyright{
+
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10px;
+    color:black;
+}
+
+#Dados{
+    color: black;
+    font-weight: bold;
+
+}
+.T1{
+
+    color: green;
+}
+
+#calculateForm{
+
+    font-weight: bold;
+}

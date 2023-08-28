@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>District Map</title>
+    <style>
+        /* Set the map container to occupy the full screen */
+        html, body, #map {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* Style for the district tooltip */
+        .district-tooltip {
+            background-color: white;
+            border: 1px solid black;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        /* Style for the search bar */
+        .search-container {
+            position: absolute;
+            top: 90px;
+            left: 10px;
+            z-index: 999;
+        }
+
+        .search-input {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 5px 0 0 5px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .search-button {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: none;
+            border-radius: 0 5px 5px 0;
+            padding: 5px 10px;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .autocomplete-options {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #000000;
+            border-radius: 5px;
+            padding: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .autocomplete-option {
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .autocomplete-option.selected {
+            background-color: #e0e0e0;
+        }
+        .custom-button {
+            display: inline-block;
+            background-color: green;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+          }
+          
+          .custom-button span {
+            color: white;
+          }
+          
+          .custom-button:hover {
+            background-color: darkgreen;
+          }
+          
+          .custom-button:active {
+            background-color: forestgreen;
+          }
+    </style>
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
+
+    <!-- Include Typeahead.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead.js/dist/typeahead.css">
+</head>
+<body>
+    <!-- Search bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search district..." oninput="showAutocompleteOptions()">
+        <div id="autocompleteOptions" class="autocomplete-options"></div>
+        <button onclick="searchDistrict()" class="search-button">Search</button>
+    </div>
+
+    <!-- Map container -->
+    <div id="map"></div>
+
+    <!-- Include the Leaflet library -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Include the JavaScript code -->
+    <script>
+        var districts = {{ districts_json | safe }};
+        var geojsonLayer;
+
+        // Create the map and set the initial view
+        var map = L.map('map').setView([-18.665695, 35.529562], 6);
+
+        // Add the OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(map);
+
+        // Add the GeoJSON layer for districts
+        geojsonLayer = L.geoJSON(districts, {
+            style: {
+                fillColor: '#ffff00',
+                color: '#000000',
+                weight: 1,
+                fillOpacity: 0.4
+            },
+            onEachFeature: function (feature, layer) {
+                layer.on({
+                    mouseover: highlightFeature,
+                    mouseout: resetHighlight,
+                    click: showPopup
+                });
+            }
+        }).addTo(map);
+
+        function highlightFeature(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                weight: 3,
+                color: '#000000',
+                fillColor: '#ffff00',
+                fillOpacity: 0.6
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
+
+            layer.bindTooltip(layer.feature.properties.ADM2_PT, {
+                sticky: true,
+                className: 'district-tooltip'
+            }).openTooltip();
+        }
+
+        function resetHighlight(e) {
+            geojsonLayer.resetStyle(e.target);
+        }
+
+        function showPopup(e) {
+            var layer = e.target;
+            var properties = layer.feature.properties;
+            var districtName = properties.ADM2_PT;
+            var popupContent = "<h3>" + districtName + "</h3>";
+            // Customize the content as per your requirements
+            popupContent += "<p>Província: " + properties.ADM1_PT + "</p>";
+
+            // Add a button to link to the dynamic URL
+            var button = "<a href='/map/district/" + encodeURIComponent(districtName) + "' class='custom-button'><span>Ir para " + districtName + "<span></a>";
+            popupContent += button;
+            
+
+            layer.bindPopup(popupContent).openPopup();
+        }
+
+        var searchInput = document.getElementById('searchInput');
+        var autocompleteOptions = document.getElementById('autocompleteOptions');
+        var timeoutId;
+
+        function showAutocompleteOptions() {
+            clearTimeout(timeoutId);
+            var searchTerm = searchInput.value.trim();
+
+            if (searchTerm === '') {
+                autocompleteOptions.innerHTML = '';
+                return;
+            }
+
+            timeoutId = setTimeout(function () {
+                var filteredDistricts = districts.features.filter(function (feature) {
+                    return feature.properties.ADM2_PT.toLowerCase().includes(searchTerm.toLowerCase());
+                });
+
+                var html = '';
+                for (var i = 0; i < filteredDistricts.length; i++) {
+                    html += '<div class="autocomplete-option" onclick="selectAutocompleteOption(this)">' + filteredDistricts[i].properties.ADM2_PT + '</div>';
+                }
+
+                autocompleteOptions.innerHTML = html;
+            }, 300);
+        }
+
+        function selectAutocompleteOption(option) {
+            searchInput.value = option.innerText;
+            autocompleteOptions.innerHTML = '';
+            searchDistrict();
+        }
+
+        searchInput.addEventListener('keydown', function (event) {
+            var options = autocompleteOptions.getElementsByClassName('autocomplete-option');
+
+            if (event.keyCode === 40) { // Arrow down key
+                event.preventDefault();
+                if (options.length > 0) {
+                    options[0].classList.add('selected');
+                    options[0].focus();
+                }
+            } else if (event.keyCode === 38) { // Arrow up key
+                event.preventDefault();
+                if (options.length > 0) {
+                    options[options.length - 1].classList.add('selected');
+                    options[options.length - 1].focus();
+                }
+            } else if (event.keyCode === 13) { // Enter key
+                event.preventDefault();
+                var selectedOption = autocompleteOptions.getElementsByClassName('autocomplete-option selected')[0];
+                if (selectedOption) {
+                    selectAutocompleteOption(selectedOption);
+                } else {
+                    searchDistrict();
+                }
+            }
+        });
+
+        autocompleteOptions.addEventListener('click', function (event) {
+            if (event.target.classList.contains('autocomplete-option')) {
+                selectAutocompleteOption(event.target);
+            }
+        });
+
+        autocompleteOptions.addEventListener('mouseover', function (event) {
+            if (event.target.classList.contains('autocomplete-option')) {
+                var options = autocompleteOptions.getElementsByClassName('autocomplete-option');
+                for (var i = 0; i < options.length; i++) {
+                    options[i].classList.remove('selected');
+                }
+                event.target.classList.add('selected');
+                event.target.focus();
+            }
+        });
+
+        autocompleteOptions.addEventListener('mouseout', function (event) {
+            if (event.target.classList.contains('autocomplete-option')) {
+                event.target.classList.remove('selected');
+            }
+        });
+
+        function searchDistrict() {
+            var searchTerm = searchInput.value.trim();
+            if (searchTerm !== '') {
+                // Case-insensitive search by district name
+                var filteredFeatures = districts.features.filter(function (feature) {
+                    return feature.properties.ADM2_PT.toLowerCase().includes(searchTerm.toLowerCase());
+                });
+
+                if (filteredFeatures.length > 0) {
+                    // Zoom in on the first found feature with custom padding
+                    var firstFeature = filteredFeatures[0];
+                    map.fitBounds(L.geoJSON(firstFeature).getBounds(), { padding: [200, 200] });
+
+                    // Highlight the found feature
+                    geojsonLayer.eachLayer(function (layer) {
+                        if (layer.feature === firstFeature) {
+                            layer.setStyle({
+                                fillColor: '#ff0000', // Highlight color (red)
+                                fillOpacity: 0.6
+                            });
+                            layer.openTooltip();
+                        } else {
+                            layer.setStyle({
+                                fillColor: '#ffff00', // Original color (yellow)
+                                fillOpacity: 0.4
+                            });
+                            layer.closeTooltip();
+                        }
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
