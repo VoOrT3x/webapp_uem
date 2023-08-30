@@ -18,7 +18,7 @@ def map():
     import json
 
     # Folder with Shapefiles
-    folder_path = '/home/nelzio/development/marcelo/webapp_uem/website/static'
+    folder_path = '/home/netadmin/webapp_uem/website/static'
 
     # Exact shape file
     shapefile_path = folder_path + "/Distritos.shp"
@@ -40,7 +40,7 @@ def district_page(district_name):
     from flask import jsonify
 
     
-    book= openpyxl.load_workbook("/home/nelzio/development/marcelo/webapp_uem/website/static/Dados_py.xlsx")
+    book= openpyxl.load_workbook("/home/netadmin/webapp_uem/website/static/Dados_py.xlsx")
     worksheet=book["Dados"]
     
     for row in worksheet.iter_rows(min_row=1, values_only=True):
@@ -70,7 +70,7 @@ def calculate(district_name):
     demand = float(request.form["demand"])
     PF = float(request.form["pf"])
     PE= float(request.form["pe"])
-    book = openpyxl.load_workbook("/home/nelzio/development/marcelo/webapp_uem/website/static/Dados_py.xlsx")
+    book = openpyxl.load_workbook("/home/netadmin/webapp_uem/website/static/Dados_py.xlsx")
     worksheet = book["Dados"]
     
     for row in worksheet.iter_rows(min_row=1, values_only=True):
@@ -137,7 +137,7 @@ def calculate(district_name):
     plt.subplots_adjust(wspace=0.6,bottom=0.1)
 
     # Save the plot image to a file
-    plot_image = '/home/nelzio/development/marcelo/webapp_uem/website/static/images/plot.png'
+    plot_image = '/home/netadmin/webapp_uem/website/static/images/plot.png'
     plt.savefig(plot_image)
 
     # Close the figure to free up resources
