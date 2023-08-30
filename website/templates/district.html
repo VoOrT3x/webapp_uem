@@ -65,12 +65,13 @@
         }
         
         #plotImage {
-            width: 100%;
+            width: 1000px;
             height: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 20px;
+            margin-top: 50px;
         }
         
         #plotImg {
@@ -90,10 +91,11 @@
             <p> Temperatura:{{Temp}} &#8451</p> 
             <p> Irradiação solar:{{Irr}}<sup>W</sup>&frasl;<sub>m<sup>2</sup></sub></p>
             <p>Velocidade do vento:{{Vent}}<sup>m</sup>&frasl;<sub>s</sub></p>
-        </div> 
         <div id="copyright">
             Fonte: NASA e NREL
         </div>
+        </div> 
+
     </div>
     <div class="container">
         <h1 class="T1"><span id="districtTitle">{{ district_name }}</span></h1>
@@ -103,7 +105,7 @@
             <br>
             <input type="number" step="0.01" id="demand" name="demand">
             <br>
-            <label for="pf">Potência dos módulos fotovoltaicos (kW):</label>
+            <label for="pf">Potência dos módulos fotovoltaicos:</label>
             <br>
             <select name="pf" id="pf">
                 <option value="0.07"><p>70 W</p></option>
@@ -115,7 +117,7 @@
               </select>
 
             <br>
-            <label for="pe">Potência das turbinas eólicas (kW):</label>
+            <label for="pe">Potência das turbinas eólicas:</label>
             <br>
             <select name="pe" id="pe">
                 <option value="10"><p>10 kW</p></option>
@@ -130,7 +132,7 @@
                 <option value="12000"><p>12 MW</p></option>
               </select>
             <br>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Calcular" >
             <input type="hidden" id="districtNameHidden" name="district_name" value="{{ district_name }}">
             <input type="hidden" id="CHidden" name="C" value="{{ C }}">
         </form>
