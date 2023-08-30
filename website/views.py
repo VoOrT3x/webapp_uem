@@ -18,7 +18,7 @@ def map():
     import json
 
     # Folder with Shapefiles
-    folder_path = r'D:\Trabalho de Licenciatura\New folder\Python\Moz Geo Data\Distritos'
+    folder_path = r'website\static'
 
     # Exact shape file
     shapefile_path = folder_path + "\Distritos.shp"
@@ -40,7 +40,7 @@ def district_page(district_name):
     from flask import jsonify
 
     
-    book= openpyxl.load_workbook(r"D:\Trabalho de Licenciatura\New folder\Python\WebApp\website\static\Dados_py.xlsx")
+    book= openpyxl.load_workbook(r"website\static\Dados_py.xlsx")
     worksheet=book["Dados"]
     
     for row in worksheet.iter_rows(min_row=1, values_only=True):
@@ -70,7 +70,7 @@ def calculate(district_name):
     demand = float(request.form["demand"])
     PF = float(request.form["pf"])
     PE= float(request.form["pe"])
-    book = openpyxl.load_workbook(r"D:\Trabalho de Licenciatura\New folder\Python\WebApp\website\static\Dados_py.xlsx")
+    book = openpyxl.load_workbook(r"website\static\Dados_py.xlsx")
     worksheet = book["Dados"]
     
     for row in worksheet.iter_rows(min_row=1, values_only=True):
