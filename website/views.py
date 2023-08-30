@@ -18,7 +18,7 @@ def map():
     import json
 
     # Folder with Shapefiles
-    folder_path = r'website\static'
+    folder_path = r'\website\static'
 
     # Exact shape file
     shapefile_path = folder_path + "\Distritos.shp"
