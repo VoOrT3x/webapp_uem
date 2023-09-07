@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head >
+<head>
+    <title>{{district_name}}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
     <style>
         .overlay {
             display: none;
@@ -108,6 +110,7 @@
             <label for="pf">Potência dos módulos fotovoltaicos:</label>
             <br>
             <select name="pf" id="pf">
+                <option value="0"><p>0 W</p></option>
                 <option value="0.07"><p>70 W</p></option>
                 <option value="0.225"><p>225 W</p></option>
                 <option value="0.34"><p>340 W</p></option>
@@ -120,7 +123,7 @@
             <label for="pe">Potência das turbinas eólicas:</label>
             <br>
             <select name="pe" id="pe">
-                <option value="0"><p>0</p></option>
+                <option value="0"><p>0 kW</p></option>
                 <option value="10"><p>10 kW</p></option>
                 <option value="100"><p>100 kW</p></option>
                 <option value="225"><p>225 kW</p></option>

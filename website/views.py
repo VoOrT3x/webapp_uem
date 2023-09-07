@@ -80,37 +80,83 @@ def calculate(district_name):
             V = float(row[3])
             Q = float(row[4])
     
-    
     PM = float(PF*G/1000*(1-0.0006*(T-25)))
     PT = round(0.9561*math.exp(-((V-25.5731)/(8.2016))**2)+0.5874*math.exp(-((V-11.0979)/(4.1853))**2)+0.6075*math.exp(-((V-16.3506)/(5.4920))**2),4)
-    print (PM)
-    print(PT)
+
     model = pulp.LpProblem(name="Lp", sense=pulp.const.LpMinimize)
+    
+    if PF !=0 and PE != 0:
+        
+        x_1 = pulp.LpVariable(name="Módulos fotovoltaicos", lowBound=0)
+        x_2 = pulp.LpVariable(name="Turbinas eólicas", lowBound=0)
+        x_3 = pulp.LpVariable(name="Altura do subsistema hídrico", lowBound=0)
+    
+        obj_func =4647*x_1*PF+8802*x_2*PE+8545*Q*x_3
+    
+        model += obj_func
+    
+        model += (8670*x_1*PM+8670*x_2*PT*PE+17218.7*Q*x_3 >= demand*10**6)
+        model += (8670*x_2*PT*PE<= 0.3*demand*10**6)
+        model += (8670*x_1*PM<= 0.80*demand*10**6)
+        model += (x_3<= 25)
+        model += (17218.7*Q*x_3<= 0.1*demand*10**6)
+        model += (17218.7*Q*x_3<=8670*x_2*PT*PE )
 
-    x_1 = pulp.LpVariable(name="Módulos fotovoltaicos", lowBound=0)
-    x_2 = pulp.LpVariable(name="Turbinas eólicas", lowBound=0)
-    x_3 = pulp.LpVariable(name="Altura do subsistema hídrico", lowBound=0)
+        status = model.solve()
+        
+        results_dict = {}
+        results_dict["Módulos_fotovoltaicos"]= math.ceil(x_1.varValue)
+        results_dict["Turbinas_eólicas"]= math.ceil(x_2.varValue)
+        results_dict["Altura_do_subsistema_hídrico"]= round(x_3.varValue,1)
+        results_dict["Custo"]= round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        results_dict["PMP"]= round(PM,2)
+        results_dict["PV"]= round(PT,2)
+        
+    elif PF == 0:
+        
+        x_2 = pulp.LpVariable(name="Turbinas eólicas", lowBound=0)
+        x_3 = pulp.LpVariable(name="Altura do subsistema hídrico", lowBound=0)
+        
+        obj_func =8802*x_2*PE+8545*Q*x_3
     
-    obj_func =4647*x_1*PF+8802*x_2*PE+8545*Q*x_3
+        model += obj_func
     
-    model += obj_func
+        model += (8670*x_2*PT*PE+17218.7*Q*x_3 >= demand*10**6)
+        model += (8670*x_2*PT*PE>= 0.80*demand*10**6)
+        model += (x_3<= 25)
+        model += (17218.7*Q*x_3<= 0.1*demand*10**6)
+        model += (17218.7*Q*x_3<=8670*x_2*PT*PE )
+        
+        status = model.solve()
+        
+        results_dict = {}
+        results_dict["Módulos_fotovoltaicos"]= 0
+        results_dict["Turbinas_eólicas"]= math.ceil(x_2.varValue)
+        results_dict["Altura_do_subsistema_hídrico"]= round(x_3.varValue,1)
+        results_dict["Custo"]= round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        results_dict["PV"]= round(PT,2)
+        results_dict["PMP"]= 0
+        
+    elif PE ==0:
+        x_1 = pulp.LpVariable(name="Módulos fotovoltaicos", lowBound=0)
+        x_3 = pulp.LpVariable(name="Altura do subsistema hídrico", lowBound=0)
     
-    model += (8670*x_1*PM+8670*x_2*PT*PE+17218.7*Q*x_3 >= demand*10**6)
-    model += (8670*x_2*PT*PE<= 0.3*demand*10**6)
-    model += (8670*x_1*PM<= 0.80*demand*10**6)
-    model += (x_3<= 25)
-    model += (17218.7*Q*x_3<= 0.1*demand*10**6)
-    model += (17218.7*Q*x_3<=8670*x_2*PT*PE )
-
-    status = model.solve()
-    
-    results_dict = {}
-    results_dict["Módulos_fotovoltaicos"]= math.ceil(x_1.varValue)
-    results_dict["Turbinas_eólicas"]= math.ceil(x_2.varValue)
-    results_dict["Altura_do_subsistema_hídrico"]= round(x_3.varValue,1)
-    results_dict["Custo"]= round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
-    results_dict["PMP"]= round(PM,2)
-    results_dict["PV"]= round(PT,2)
+        obj_func =4647*x_1*PF+8545*Q*x_3
+        model += obj_func
+        
+        model += (8670*x_1*PM+17218.7*Q*x_3 >= demand*10**6)
+        model += (8670*x_1*PM>= 0.80*demand*10**6)
+        model += (x_3<= 25)
+        model += (17218.7*Q*x_3<= 0.1*demand*10**6)       
+        status = model.solve()
+        
+        results_dict = {}
+        results_dict["Módulos_fotovoltaicos"]= math.ceil(x_1.varValue)
+        results_dict["Turbinas_eólicas"]= 0
+        results_dict["Altura_do_subsistema_hídrico"]= round(x_3.varValue,1)
+        results_dict["Custo"]= round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        results_dict["PMP"]= round(PM,2)
+        results_dict["PV"]= round(PT,2)        
     
     fig = plt.figure(figsize=(12, 5))
     ax1 = fig.add_subplot(1,2,1, projection='3d')
