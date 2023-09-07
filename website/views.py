@@ -33,7 +33,7 @@ def map():
 
 
 
-@views.route("/map/distrito/<district_name>")
+@views.route("/mapa/distrito/<district_name>")
 def district_page(district_name):
     import pulp 
     import openpyxl
