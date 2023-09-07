@@ -56,7 +56,7 @@ def district_page(district_name):
     return render_template("district.html", district_name=district_name,Temp=Temp,Irr=Irr,Vent=Vent)
 
 
-@views.route("/map/district/<district_name>/calculate", methods=["POST"])
+@views.route("/mapa/distrito/<district_name>/calculate", methods=["POST"])
 def calculate(district_name):
     import pulp 
     import openpyxl
