@@ -108,7 +108,8 @@ def calculate(district_name):
         results_dict["Módulos_fotovoltaicos"]= math.ceil(x_1.varValue)
         results_dict["Turbinas_eólicas"]= math.ceil(x_2.varValue)
         results_dict["Altura_do_subsistema_hídrico"]= round(x_3.varValue,1)
-        results_dict["Custo"]= round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        Custo1 = round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        results_dict["Custo"]= "{:,}".format(Custo1)
         results_dict["PMP"]= round(PM,2)
         results_dict["PV"]= round(PT,2)
         
@@ -133,7 +134,8 @@ def calculate(district_name):
         results_dict["Módulos_fotovoltaicos"]= 0
         results_dict["Turbinas_eólicas"]= math.ceil(x_2.varValue)
         results_dict["Altura_do_subsistema_hídrico"]= round(x_3.varValue,1)
-        results_dict["Custo"]= round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        Custo1 = round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        results_dict["Custo"]= "{:,}".format(Custo1)
         results_dict["PV"]= round(PT,2)
         results_dict["PMP"]= 0
         
@@ -154,7 +156,8 @@ def calculate(district_name):
         results_dict["Módulos_fotovoltaicos"]= math.ceil(x_1.varValue)
         results_dict["Turbinas_eólicas"]= 0
         results_dict["Altura_do_subsistema_hídrico"]= round(x_3.varValue,1)
-        results_dict["Custo"]= round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        Custo1 = round(4647*results_dict["Módulos_fotovoltaicos"]*PF+8802*results_dict["Turbinas_eólicas"]*PE+8545*Q*results_dict["Altura_do_subsistema_hídrico"],2)
+        results_dict["Custo"]= "{:,}".format(Custo1)
         results_dict["PMP"]= round(PM,2)
         results_dict["PV"]= round(PT,2)        
     
