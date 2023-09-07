@@ -12,7 +12,7 @@ def home():
     return render_template("base.html")
 
 
-@views.route("/map")
+@views.route("/mapa")
 def map():
     import geopandas as gpd
     import json
@@ -33,7 +33,7 @@ def map():
 
 
 
-@views.route("/map/district/<district_name>")
+@views.route("/map/distrito/<district_name>")
 def district_page(district_name):
     import pulp 
     import openpyxl
