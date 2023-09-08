@@ -53,9 +53,15 @@ input[type="submit"] {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 5px;
-    width:200px;
-    height: 350px;
+    width:10%;
+    height: 35%;
     color: green;
+    overflow: hidden;
+}
+
+.container3 img {
+    width: 150px;
+    height: 130px;
 }
 #copyright{
 

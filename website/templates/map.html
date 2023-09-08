@@ -84,41 +84,42 @@
             background-color: forestgreen;
           }
     </style>
-    <!-- Include Leaflet CSS -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
 
-    <!-- Include Typeahead.js CSS -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeahead.js/dist/typeahead.css">
 </head>
 <body>
-    <!-- Search bar -->
+
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="Procurar distrito..." oninput="showAutocompleteOptions()">
         <div id="autocompleteOptions" class="autocomplete-options"></div>
         <button onclick="searchDistrict()" class="search-button">Procurar</button>
     </div>
 
-    <!-- Map container -->
     <div id="map"></div>
 
-    <!-- Include the Leaflet library -->
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <!-- Include the JavaScript code -->
+
     <script>
         var districts = {{ districts_json | safe }};
         var geojsonLayer;
 
-        // Create the map and set the initial view
-        var map = L.map('map').setView([-18.665695, 35.529562], 6);
 
-        // Add the OpenStreetMap tile layer
+        var map = L.map('map', {
+            zoomControl: false 
+        }).setView([-18.665695, 35.529562], 6);
+
+
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
             maxZoom: 18
         }).addTo(map);
 
-        // Add the GeoJSON layer for districts
+
         geojsonLayer = L.geoJSON(districts, {
             style: {
                 fillColor: '#ffff00',
@@ -164,10 +165,10 @@
             var properties = layer.feature.properties;
             var districtName = properties.ADM2_PT;
             var popupContent = "<h3>" + districtName + "</h3>";
-            // Customize the content as per your requirements
+
             popupContent += "<p>Província: " + properties.ADM1_PT + "</p>";
 
-            // Add a button to link to the dynamic URL
+
             var button = "<a href='/mapa/distrito/" + encodeURIComponent(districtName) + "' class='custom-button'><span>Ir para " + districtName + "<span></a>";
             popupContent += button;
             
@@ -211,13 +212,13 @@
         searchInput.addEventListener('keydown', function (event) {
             var options = autocompleteOptions.getElementsByClassName('autocomplete-option');
 
-            if (event.keyCode === 40) { // Arrow down key
+            if (event.keyCode === 40) { 
                 event.preventDefault();
                 if (options.length > 0) {
                     options[0].classList.add('selected');
                     options[0].focus();
                 }
-            } else if (event.keyCode === 38) { // Arrow up key
+            } else if (event.keyCode === 38) { 
                 event.preventDefault();
                 if (options.length > 0) {
                     options[options.length - 1].classList.add('selected');
@@ -260,27 +261,27 @@
         function searchDistrict() {
             var searchTerm = searchInput.value.trim();
             if (searchTerm !== '') {
-                // Case-insensitive search by district name
+
                 var filteredFeatures = districts.features.filter(function (feature) {
                     return feature.properties.ADM2_PT.toLowerCase().includes(searchTerm.toLowerCase());
                 });
 
                 if (filteredFeatures.length > 0) {
-                    // Zoom in on the first found feature with custom padding
+
                     var firstFeature = filteredFeatures[0];
                     map.fitBounds(L.geoJSON(firstFeature).getBounds(), { padding: [200, 200] });
 
-                    // Highlight the found feature
+       
                     geojsonLayer.eachLayer(function (layer) {
                         if (layer.feature === firstFeature) {
                             layer.setStyle({
-                                fillColor: '#ff0000', // Highlight color (red)
+                                fillColor: '#ff0000', 
                                 fillOpacity: 0.6
                             });
                             layer.openTooltip();
                         } else {
                             layer.setStyle({
-                                fillColor: '#ffff00', // Original color (yellow)
+                                fillColor: '#ffff00', 
                                 fillOpacity: 0.4
                             });
                             layer.closeTooltip();

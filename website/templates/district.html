@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head >
     <title>{{district_name}}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
@@ -67,13 +67,12 @@
         }
         
         #plotImage {
-            width: 1000px;
+            width: 100%;
             height: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 20px;
-            margin-top: 50px;
         }
         
         #plotImg {
@@ -81,12 +80,11 @@
             max-height: 100%;
         }
 
-
+        
     </style>
 </head>
 <body>
-    <a href="/mapa" class="exit-button">&larr;</a>
-
+    <a href="/map" class="exit-button">&larr;</a>
 
     <div class="container2">
         <h2> Dados Metereologicos Anuais </h2>
@@ -94,21 +92,20 @@
             <p> Temperatura:{{Temp}} &#8451</p> 
             <p> Irradiação solar:{{Irr}}<sup>W</sup>&frasl;<sub>m<sup>2</sup></sub></p>
             <p>Velocidade do vento:{{Vent}}<sup>m</sup>&frasl;<sub>s</sub></p>
+        </div> 
         <div id="copyright">
             Fonte: NASA e NREL
         </div>
-        </div> 
-
     </div>
     <div class="container">
         <h1 class="T1"><span id="districtTitle">{{ district_name }}</span></h1>
         <h2 class="T1">Insira os dados:</h2>
-        <form id="calculateForm" action="/mapa/distrito/{{ district_name }}/calculate" method="POST">
+        <form id="calculateForm" action="/map/district/{{ district_name }}/calculate" method="POST">
             <label for="demand">Demanda Anual(GWh/Ano):</label>
             <br>
             <input type="number" step="0.01" id="demand" name="demand">
             <br>
-            <label for="pf">Potência dos módulos fotovoltaicos:</label>
+            <label for="pf">Potência dos módulos fotovoltaicos (kW):</label>
             <br>
             <select name="pf" id="pf">
                 <option value="0"><p>0 W</p></option>
@@ -121,7 +118,7 @@
               </select>
 
             <br>
-            <label for="pe">Potência das turbinas eólicas:</label>
+            <label for="pe">Potência das turbinas eólicas (kW):</label>
             <br>
             <select name="pe" id="pe">
                 <option value="0"><p>0 kW</p></option>
@@ -137,15 +134,20 @@
                 <option value="12000"><p>12 MW</p></option>
               </select>
             <br>
-            <input type="submit" value="Calcular" >
+            <input type="submit" value="Submit">
             <input type="hidden" id="districtNameHidden" name="district_name" value="{{ district_name }}">
             <input type="hidden" id="CHidden" name="C" value="{{ C }}">
         </form>
     </div>
     
     <div class="container3">
-        <h2> Recomendações </h2>
-
+        <h2> Ilustrações  </h2>
+        <div id="pfImages">
+            <!-- Images for pf selection will appear here -->
+        </div>
+        <div id="peImages">
+            <!-- Images for pe selection will appear here -->
+        </div>
 
     </div>  
     <div class="overlay" id="resultsOverlay">
@@ -155,6 +157,67 @@
             <div class="close-btn" onclick="closeOverlay()">X</div>
         </div>
     </div>
+    <script>
+
+        var pfImageUrls = {
+            0.07: "/static/70W.jpg",
+            0.225: "/static/225W.webp",
+            0.34: "/static/340W.jpg",
+            0.55: "/static/550W.jpg",
+            0.61: "/static/610W.png",
+            1:"/static/1kW.jpg",
+
+        };
+    
+        var peImageUrls = {
+            10: "/static/10kW.jpg",
+            100: "/static/100kW.jpg",
+            225: "/static/225kW.jpg",
+            660: "/static/660kW.jpg",
+            1000: "/static/1MW.jpg",
+            2600: "/static/2.6MW.jpg",
+            3300: "/static/3.3MW.jpg",
+            6000: "/static/6MW.png",
+            8300: "/static/8.3MW.jpg",
+            12000: "/static/12MW.jpg",
+
+        };
+    
+        function updateImages() {
+            var pfSelect = document.getElementById('pf');
+            var peSelect = document.getElementById('pe');
+            var pfImagesDiv = document.getElementById('pfImages');
+            var peImagesDiv = document.getElementById('peImages');
+            
+
+            pfImagesDiv.innerHTML = '';
+            peImagesDiv.innerHTML = '';
+    
+
+            var selectedPf = parseFloat(pfSelect.value);
+            var selectedPe = parseFloat(peSelect.value);
+    
+
+            if (selectedPf in pfImageUrls) {
+                var pfImage = document.createElement('img');
+                pfImage.src = pfImageUrls[selectedPf];
+                pfImagesDiv.appendChild(pfImage);
+            }
+    
+            if (selectedPe in peImageUrls) {
+                var peImage = document.createElement('img');
+                peImage.src = peImageUrls[selectedPe];
+                peImagesDiv.appendChild(peImage);
+            }
+        }
+    
+
+        document.getElementById('pf').addEventListener('change', updateImages);
+        document.getElementById('pe').addEventListener('change', updateImages);
+    
+
+        updateImages();
+    </script>
 
     <script>
         function openOverlay() {
