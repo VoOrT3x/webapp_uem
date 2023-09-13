@@ -128,11 +128,13 @@
                 fillOpacity: 0.4
             },
             onEachFeature: function (feature, layer) {
-                layer.on({
-                    mouseover: highlightFeature,
-                    mouseout: resetHighlight,
-                    click: showPopup
-                });
+                if (feature.properties.ADM2_PT !== "Lago Niassa") {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight,
+                        click: showPopup
+                    });
+                }
             }
         }).addTo(map);
 
