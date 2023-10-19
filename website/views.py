@@ -95,9 +95,9 @@ def calculate(district_name):
     
         model += obj_func
     
-        model += (8670*x_1*PM+8670*x_2*PT*PE+17218.7*Q*x_3 >= demand*10**6)
+        model += (2920*x_1*PM+8670*x_2*PT*PE+17218.7*Q*x_3 >= demand*10**6)
         model += (8670*x_2*PT*PE<= 0.3*demand*10**6)
-        model += (8670*x_1*PM<= 0.80*demand*10**6)
+        model += (2920*x_1*PM<= 0.80*demand*10**6)
         model += (x_3<= 25)
         model += (17218.7*Q*x_3<= 0.1*demand*10**6)
         model += (17218.7*Q*x_3<=8670*x_2*PT*PE )
@@ -146,8 +146,8 @@ def calculate(district_name):
         obj_func =4647*x_1*PF+8545*Q*x_3
         model += obj_func
         
-        model += (8670*x_1*PM+17218.7*Q*x_3 >= demand*10**6)
-        model += (8670*x_1*PM>= 0.80*demand*10**6)
+        model += (2920*x_1*PM+17218.7*Q*x_3 >= demand*10**6)
+        model += (2920*x_1*PM>= 0.80*demand*10**6)
         model += (x_3<= 25)
         model += (17218.7*Q*x_3<= 0.1*demand*10**6)       
         status = model.solve()
