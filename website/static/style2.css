@@ -6,6 +6,18 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+.close-btn {
+    top: 10%;
+    right: 10%;
+    color: red;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+    position: absolute;
+}
+
 .body2 {
     display: flex;
     justify-content: center;
