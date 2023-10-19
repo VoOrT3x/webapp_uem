@@ -30,10 +30,10 @@ body {
     padding: 20px;
     border-radius: 5px;
     text-align: center;
-    width:150px;
+    width: 30%;
     margin-left:20px;
     margin-right: 20px;
-    height: 350px;
+    height: 40%;
 }
 
 input[type="number"] {
@@ -55,8 +55,8 @@ input[type="submit"] {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 5px;
-    width:150px;
-    height: 350px;
+    width:30%;
+    height: 40%;
     position: relative;
     color: green;
 }
@@ -65,8 +65,8 @@ input[type="submit"] {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 5px;
-    width:150px;
-    height: 350px;
+    width:30%;
+    height: 40%;
     color: green;
     overflow: hidden;
 }
