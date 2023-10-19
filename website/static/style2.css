@@ -8,8 +8,8 @@ body {
 }
 
 .close-btn {
-    top: 10px;
-    right: 10px;
+    top: 50px;
+    right: 30px;
     color: red;
     cursor: pointer;
     font-size: 24px;
